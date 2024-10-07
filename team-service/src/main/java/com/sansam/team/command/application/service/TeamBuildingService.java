@@ -1,9 +1,8 @@
 package com.sansam.team.command.application.service;
 
 
-import com.sansam.team.client.ProjectServiceClient;
-import com.sansam.team.client.UserServiceClient;
-import com.sansam.team.client.dto.*;
+import com.sansam.team.command.infrastructure.service.ProjectService;
+import com.sansam.team.command.infrastructure.service.UserService;
 import com.sansam.team.command.application.dto.TeamBuildingDTO;
 import com.sansam.team.command.application.dto.TeamBuildingRuleDTO;
 import com.sansam.team.command.domain.aggregate.entity.Team;
@@ -14,6 +13,7 @@ import com.sansam.team.command.domain.repository.TeamBuildingRuleRepository;
 import com.sansam.team.command.domain.repository.TeamMemberRepository;
 import com.sansam.team.command.domain.repository.TeamRepository;
 import com.sansam.team.command.domain.repository.TeamReviewRepository;
+import com.sansam.team.command.infrastructure.dto.*;
 import com.sansam.team.common.aggregate.DevelopType;
 import com.sansam.team.common.aggregate.YnType;
 import com.sansam.team.common.github.GithubUtil;
@@ -30,8 +30,8 @@ import java.util.*;
 @Slf4j
 public class TeamBuildingService {
 
-    private final UserServiceClient userServiceClient;
-    private final ProjectServiceClient projectServiceClient;
+    private final UserService userService;
+    private final ProjectService projectService;
 
     private final TeamRepository teamRepository;
     private final GithubUtil githubUtil;
@@ -41,17 +41,17 @@ public class TeamBuildingService {
 
     // 1. 깃허브 커밋 점수 계산 로직
     public long calculateCommitScore(TeamBuildingDTO teamBuildingDTO) throws IOException {
-        UserDTO user = userServiceClient.findUserById(teamBuildingDTO.getUserSeq());
+        UserDTO user = userService.findUserById(teamBuildingDTO.getUserSeq());
         if(user == null) {
             throw new RuntimeException("유저 정보가 존재하지 않습니다.");
         }
 
-        ProjectMemberDTO pjMember = projectServiceClient.findProjectMemberById(teamBuildingDTO.getProjectMemberSeq());
+        ProjectMemberDTO pjMember = projectService.findProjectMemberById(teamBuildingDTO.getProjectMemberSeq());
         if(pjMember == null) {
             throw new RuntimeException("프로젝트 정보가 존재하지 않습니다.");
         }
 
-        List<UserGithubRepositoryDTO> userGithubRepositories = userServiceClient.findAllGithubRepositoryByUserSeq(user.getUserSeq()).getData();
+        List<UserGithubRepositoryDTO> userGithubRepositories = userService.findAllGithubRepositoryByUserSeq(user.getUserSeq()).getData();
         Map<DevelopType,Integer> CommitCntByDevelopType = githubUtil.analyzeCommitCountByDevelopType(userGithubRepositories, user.getUserGithubId());
 
         int commitCnt = CommitCntByDevelopType.get(pjMember.getProjectMemberDevelopType());
@@ -80,14 +80,14 @@ public class TeamBuildingService {
         //pjMember commitScore 업데이트
         ProjectMemberUpdateDTO pjMemberUpdateDTO = new ProjectMemberUpdateDTO();
         pjMemberUpdateDTO.setProjectMemberCommitScore(commitScore);
-        projectServiceClient.modifyProjectMember(pjMember.getProjectMemberSeq(), pjMemberUpdateDTO);
+        projectService.modifyProjectMember(pjMember.getProjectMemberSeq(), pjMemberUpdateDTO);
 
         return commitScore;
     }
 
     // 2. 전공 점수 계산 로직
     public int calculateMajorScore(TeamBuildingDTO teamBuildingDTO) throws IOException {
-        ProjectMemberDTO pjMember = projectServiceClient.findProjectMemberById(teamBuildingDTO.getProjectMemberSeq());
+        ProjectMemberDTO pjMember = projectService.findProjectMemberById(teamBuildingDTO.getProjectMemberSeq());
         if(pjMember == null) {
             throw new RuntimeException("프로젝트 정보가 존재하지 않습니다.");
         }
@@ -97,7 +97,7 @@ public class TeamBuildingService {
 
     // 3. 경력 점수 계산 로직
     public int calculateCareerScore(TeamBuildingDTO teamBuildingDTO) throws IOException {
-        UserDTO user = userServiceClient.findUserById(teamBuildingDTO.getUserSeq());
+        UserDTO user = userService.findUserById(teamBuildingDTO.getUserSeq());
         if(user == null) {
             throw new RuntimeException("유저 정보가 존재하지 않습니다.");
         }
@@ -141,7 +141,7 @@ public class TeamBuildingService {
     //5. 강사 평가 점수 계산 로직
 
     public double calculateMentorEvaluation(TeamBuildingDTO teamBuildingDTO) throws IOException{
-        List<MentorReviewDTO> reviews = projectServiceClient.findMentorReviewByProjectMemberSeq(teamBuildingDTO.getProjectMemberSeq());
+        List<MentorReviewDTO> reviews = projectService.findMentorReviewByProjectMemberSeq(teamBuildingDTO.getProjectMemberSeq());
 
         double totalEvaluation = 0;
 
@@ -170,7 +170,7 @@ public class TeamBuildingService {
     public List<Team> buildBalancedTeams(Long projectSeq, int teamBuildingRuleSeq) throws IOException {
 
         //1. 해당 프로젝트 참여자 List와 팀빌딩 규칙 불러오기
-        List<ProjectMemberDTO> projectMembers = projectServiceClient.findProjectMemberByProjectSeq(projectSeq);
+        List<ProjectMemberDTO> projectMembers = projectService.findProjectMemberByProjectSeq(projectSeq);
         TeamBuildingRule buildingRule = buildingRuleRepository.findById(teamBuildingRuleSeq)
                 .orElseThrow(() -> new RuntimeException("빌딩 규칙이 존재하지 않습니다."));
 

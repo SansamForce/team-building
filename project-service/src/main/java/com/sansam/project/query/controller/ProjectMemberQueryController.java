@@ -7,7 +7,6 @@ import com.sansam.project.query.dto.ProjectAllQueryDTO;
 import com.sansam.project.query.dto.ProjectQueryDTO;
 import com.sansam.project.query.service.ProjectMemberQueryService;
 import com.sansam.project.query.service.ProjectQueryService;
-import com.sansam.team.client.dto.ProjectMemberDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

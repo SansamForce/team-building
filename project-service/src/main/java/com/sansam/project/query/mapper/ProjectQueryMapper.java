@@ -4,7 +4,7 @@ package com.sansam.project.query.mapper;
 import com.sansam.project.query.dto.AdminProjectQueryDTO;
 import com.sansam.project.query.dto.ProjectAllQueryDTO;
 import com.sansam.project.query.dto.ProjectQueryDTO;
-import com.sansam.team.client.dto.ProjectMemberDTO;
+import com.sansam.team.command.infrastructure.dto.ProjectMemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

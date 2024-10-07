@@ -1,6 +1,6 @@
 package com.sansam.team.common.github;
 
-import com.sansam.team.client.dto.UserGithubRepositoryDTO;
+import com.sansam.team.command.infrastructure.dto.UserGithubRepositoryDTO;
 import com.sansam.team.common.aggregate.DevelopType;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.*;

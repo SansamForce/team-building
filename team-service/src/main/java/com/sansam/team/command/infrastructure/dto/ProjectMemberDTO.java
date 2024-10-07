@@ -1,4 +1,4 @@
-package com.sansam.team.client.dto;
+package com.sansam.team.command.infrastructure.dto;
 
 import com.sansam.team.common.aggregate.DevelopType;
 import com.sansam.team.common.aggregate.YnType;
