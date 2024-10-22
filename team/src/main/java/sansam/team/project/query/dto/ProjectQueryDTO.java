@@ -20,6 +20,6 @@ public class ProjectQueryDTO {
     private ProjectStatus projectStatus;
     private int projectHeadCount;
     private String projectImgUrl;
-    private LocalDateTime projectStartDate;
-    private LocalDateTime projectEndDate;
+    private String projectStartDate;
+    private String projectEndDate;
 }
