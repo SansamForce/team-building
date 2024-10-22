@@ -61,8 +61,8 @@
             project_status AS projectStatus,
             project_head_count AS projectHeadCount,
             project_img_url AS projectImgUrl,
-            DATE_FORMAT(project_start_date , '%Y-%m-%d) AS projectStartDate,
-            DATE_FORMAT(project_end_date , '%Y-%m-%d) AS projectEndDate
+            DATE_FORMAT(project_start_date , '%Y-%m-%d') AS projectStartDate,
+            DATE_FORMAT(project_end_date , '%Y-%m-%d') AS projectEndDate
         FROM
             tbl_project
         WHERE
