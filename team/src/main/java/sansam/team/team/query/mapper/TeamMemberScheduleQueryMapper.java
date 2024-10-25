@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface TeamMemberScheduleQueryMapper {
-    List<TeamMemberScheduleQueryDTO> selectTeamMemberScheduleList(long teamScheduleSeq);
+    List<TeamMemberScheduleQueryDTO> selectTeamMemberScheduleListByTeamSeq(long teamSeq);
 }

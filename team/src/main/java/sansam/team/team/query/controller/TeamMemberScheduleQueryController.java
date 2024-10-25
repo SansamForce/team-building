@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/team/{teamSeq}/memberSchedule/{teamScheduleSeq}")
+@RequestMapping("/api/v1/team/{teamSeq}/memberSchedule")
 @RequiredArgsConstructor
 @Tag(name = "3-4-2. TeamMember Schedule API", description = "회원 별 진행상황 API")
 public class TeamMemberScheduleQueryController {
@@ -25,8 +25,8 @@ public class TeamMemberScheduleQueryController {
 
     @GetMapping
     @Operation(summary = "팀원 일정 조회", description = "팀원 일정 API")
-    public ApiResponse<List<TeamMemberScheduleQueryDTO>> getTeamMemberScheduleList(@PathVariable long teamScheduleSeq) {
-        List<TeamMemberScheduleQueryDTO> memberScheduleList = teamMemberScheduleQueryService.getTeamMemberScheduleList(teamScheduleSeq);
+    public ApiResponse<List<TeamMemberScheduleQueryDTO>> selectTeamMemberScheduleListByTeamSeq(@PathVariable long teamSeq) {
+        List<TeamMemberScheduleQueryDTO> memberScheduleList = teamMemberScheduleQueryService.selectTeamMemberScheduleListByTeamSeq(teamSeq);
         return ApiResponse.ofSuccess("Team member schedule list retrieved successfully", memberScheduleList);
     }
 

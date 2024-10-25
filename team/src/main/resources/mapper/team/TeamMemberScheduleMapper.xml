@@ -18,5 +18,20 @@
         WHERE tsp.team_schedule_seq = #{teamScheduleSeq}
     </select>
 
+    <select id="selectTeamMemberScheduleListByTeamSeq" resultType="TeamMemberScheduleQueryDTO">
+        SELECT tsp.team_schedule_progress_seq
+        ,  tsp.team_schedule_seq
+        ,  tsp.team_member_seq
+        ,  tsp.team_schedule_progress_content
+        ,  tsp.team_schedule_progress_percent
+        ,  tsp.team_schedule_progress_feedback
+        , DATE_FORMAT(tsp.reg_date, '%Y-%m-%d %H:%i:%s') reg_date
+        , DATE_FORMAT(tsp.mod_date, '%Y-%m-%d %H:%i:%s') mod_date
+        FROM Team t
+        JOIN tbl_team_schedule ts ON (t.team_seq = ts.team_seq)
+        JOIN tbl_team_member_schedule_progress tsp ON (ts.team_schedule_seq = tsp.team_schedule_seq)
+        WHERE tsp.team_seq = #{teamSeq}
+    </select>
+
 </mapper>
 
